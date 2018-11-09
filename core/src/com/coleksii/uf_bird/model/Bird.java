@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 
 public class Bird extends Model{
 
-    private Animation animation;
+    private Animation<Texture> animation;
 
     public Bird(String value) {
         super(value);
@@ -22,7 +22,7 @@ public class Bird extends Model{
         textures[2] = new Texture("anim/frame-3.png");
         textures[3] = new Texture("anim/frame-4.png");
 
-        animation = new Animation(1f/4f, textures);
+        animation = new Animation<Texture>(1f/4f, textures);
 
     }
 
@@ -49,7 +49,7 @@ public class Bird extends Model{
         }
     }
 
-    public Animation getAnimation() {
+    public Animation<Texture> getAnimation() {
         return animation;
     }
 }

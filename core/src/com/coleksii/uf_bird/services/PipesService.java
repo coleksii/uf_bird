@@ -8,4 +8,5 @@ public interface PipesService {
     PipePair generatePiperPair();
     PipePair changeCurrentPiperPair(PipePair pipePair);
     List<PipePair> createStorePipes();
+    void processingPipe(List<PipePair> pipesCollection, List<PipePair> storePipes);
 }

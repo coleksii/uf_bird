@@ -11,6 +11,7 @@ public class PipePair {
         this.downerPipe = new OnePipe(TextureName.PIPE_DOWN.getValue());
     }
 
+
     public OnePipe getUpperPipe() {
         return upperPipe;
     }

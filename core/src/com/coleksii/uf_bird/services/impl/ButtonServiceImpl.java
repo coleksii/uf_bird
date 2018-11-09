@@ -9,30 +9,28 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.coleksii.uf_bird.MyGdxGame;
 import com.coleksii.uf_bird.enums.States;
+import com.coleksii.uf_bird.information.UserInformation;
 import com.coleksii.uf_bird.services.ButtonService;
 
 public class ButtonServiceImpl implements ButtonService {
     private Skin skin;
     private BitmapFont font;
-    private MyGdxGame myGdxGame;
 
-    public ButtonServiceImpl(MyGdxGame myGdxGame){
+
+    public ButtonServiceImpl() {
         font = new BitmapFont();
         skin = createBasicSkin();
-        this.myGdxGame = myGdxGame;
     }
 
     @Override
-    public TextButton createNewGameButton() {
+    public TextButton createNewGameButton(final UserInformation userInformation) {
         TextButton newGameButton = new TextButton("Start game", skin);
         newGameButton.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8, Gdx.graphics.getHeight()/2 + (newGameButton.getHeight()));
         newGameButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                myGdxGame.setState(States.PREPARE);
-
+                userInformation.setUserState(States.PREPARE);
             }
         });
         return newGameButton;
