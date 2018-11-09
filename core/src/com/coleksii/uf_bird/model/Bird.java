@@ -13,6 +13,8 @@ public class Bird extends Model{
         int size = calculateBirdSize();
         setWidth(size * 1.2f);
         setHeight(size);
+        setX(Gdx.graphics.getWidth() / 2 / 2);
+        setY(Gdx.graphics.getHeight() / 2);
 
         Texture textures[] = new Texture[4];
         textures[0] = new Texture("anim/frame-1.png");
@@ -25,8 +27,8 @@ public class Bird extends Model{
     }
 
     private int calculateBirdSize(){
-        int shortesSide = Gdx.graphics.getWidth() > Gdx.graphics.getHeight() ? Gdx.graphics.getHeight() : Gdx.graphics.getWidth();
-        return shortesSide / 15;
+        int shortestSide = Gdx.graphics.getWidth() > Gdx.graphics.getHeight() ? Gdx.graphics.getHeight() : Gdx.graphics.getWidth();
+        return shortestSide / 15;
     }
 
     @Override

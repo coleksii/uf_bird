@@ -5,7 +5,8 @@ public enum TextureName {
     PIPE_UPPER("upperPipe.png"),
     BIRD("bird.png"),
     BACK("back.png"),
-    XWING("xwing.png");
+    XWING("xwing.png"),
+    GROUND("ground.png");
 
     private String value;
 

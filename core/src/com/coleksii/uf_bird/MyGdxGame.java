@@ -3,16 +3,21 @@ package com.coleksii.uf_bird;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.coleksii.uf_bird.background.ScrolingBackground;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.coleksii.uf_bird.background.GraphicObjProcessor;
+import com.coleksii.uf_bird.enums.States;
 import com.coleksii.uf_bird.enums.TextureName;
 import com.coleksii.uf_bird.model.Bird;
 import com.coleksii.uf_bird.model.OnePipe;
 import com.coleksii.uf_bird.model.PipePair;
+import com.coleksii.uf_bird.services.ButtonService;
 import com.coleksii.uf_bird.services.PipesService;
 import com.coleksii.uf_bird.services.TimeService;
+import com.coleksii.uf_bird.services.impl.ButtonServiceImpl;
 import com.coleksii.uf_bird.services.impl.PiperServiceImpl;
 import com.coleksii.uf_bird.services.impl.TimeServiceImpl;
 
@@ -22,46 +27,73 @@ import java.util.List;
 public class MyGdxGame extends ApplicationAdapter {
     private SpriteBatch batch;
     private Bird bird;
-    private ScrolingBackground scrolingBackground;
+    private GraphicObjProcessor graphicObjProcessor;
     private int speedPipes = 3;
     private List<PipePair> pipesCollection;
     private List<PipePair> storePipes;
     private PipesService pipesService;
     private TimeService timeService;
     private float elapsedTime;
+    private BitmapFont font;
+    private BitmapFont prepareFont;
+    private long score;
+    private long latestScore;
+    private States states;
+    private Stage stage;
+    private ButtonService buttonService;
+
+    public void setState(States state) {
+        this.states = state;
+    }
 
 
     @Override
     public void create() {
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
         batch = new SpriteBatch();
         bird = new Bird(TextureName.BIRD.getValue());
-        bird.setX(Gdx.graphics.getWidth() / 2 / 2);
-        bird.setY(Gdx.graphics.getHeight() / 2);
-        scrolingBackground = new ScrolingBackground();
+        graphicObjProcessor = new GraphicObjProcessor();
         pipesCollection = new LinkedList<PipePair>();
         pipesService = new PiperServiceImpl();
-        storePipes = createStorePipes();
+        storePipes = pipesService.createStorePipes();
         timeService = new TimeServiceImpl();
-    }
+        font = new BitmapFont();
+        font.getData().setScale(2);
 
-    private List<PipePair> createStorePipes() {
-        int i = 0;
-        List list = new LinkedList<PipePair>();
-        while (i > 10) {
-            list.add(pipesService.generatePiperPair());
-        }
-        return list;
+        prepareFont = new BitmapFont();
+        prepareFont.setColor(Color.BLACK);
+        prepareFont.getData().setScale(1.5f);
+
+        states = States.MAIN_MENU;
+        buttonService = new ButtonServiceImpl(this);
+        stage.addActor(buttonService.createNewGameButton());
+        stage.addActor(buttonService.createExitButton());
     }
 
     @Override
     public void render() {
         elapsedTime += Gdx.graphics.getDeltaTime();
-        Gdx.gl.glClearColor(0, 0, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if (collision())
-            Gdx.app.exit();
-        birdController();
-        processingPipe();
+        if (states == States.PREPARE) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) || Gdx.input.isTouched()) {
+                states = States.GAME;
+                Gdx.input.setInputProcessor(null);
+            }
+        } else if (states == States.GAME) {
+            score++;
+            if (collision() || graphicObjProcessor.collisionWithGround(bird)) {
+                bird.setY(Gdx.graphics.getHeight() / 2);
+                states = States.MAIN_MENU;
+                Gdx.input.setInputProcessor(stage);
+                storePipes.addAll(pipesCollection);
+                pipesCollection.clear();
+                latestScore = score;
+                score = 0;
+            } else {
+                birdController();
+                processingPipe();
+            }
+        }
         drawing();
     }
 
@@ -112,16 +144,27 @@ public class MyGdxGame extends ApplicationAdapter {
     private void drawing() {
         OnePipe upperPipe;
         OnePipe downPipe;
-        scrolingBackground.updateBackGround();
+        graphicObjProcessor.updateBackGround();
+        batch.begin();
+        if (states == States.MAIN_MENU) {
+            stage.draw();
+        }
+        batch.end();
+
         batch.begin();
         batch.draw((Texture) bird.getAnimation().getKeyFrame(elapsedTime, true), bird.getX(), bird.getY(), bird.getWidth(), bird.getHeight());
-//        batch.draw(bird.getTexture(), bird.getX(), bird.getY(), bird.getWidth(), bird.getHeight());
         for (PipePair pipes : pipesCollection) {
             upperPipe = pipes.getUpperPipe();
             downPipe = pipes.getDownerPipe();
             batch.draw(downPipe.getTexture(), downPipe.getX(), downPipe.getY(), downPipe.getWidth(), downPipe.getHeight());
             batch.draw(upperPipe.getTexture(), upperPipe.getX(), upperPipe.getY(), upperPipe.getWidth(), upperPipe.getHeight());
         }
+        if (states == States.PREPARE) {
+            prepareFont.draw(batch, "TOUCH TO PLAY", Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+        }
+        if (states == States.MAIN_MENU && latestScore != 0)
+            prepareFont.draw(batch, "YOUR LATEST SCORE IS: " + latestScore, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+        font.draw(batch, "score: " + score, 10, Gdx.graphics.getHeight() - font.getCapHeight());
         batch.end();
     }
 
@@ -145,5 +188,16 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
+        stage.dispose();
+        for (PipePair pipePair : storePipes) {
+            pipePair.getDownerPipe().getTexture().dispose();
+            pipePair.getUpperPipe().getTexture().dispose();
+        }
+
+        for (PipePair pipePair : pipesCollection) {
+            pipePair.getDownerPipe().getTexture().dispose();
+            pipePair.getUpperPipe().getTexture().dispose();
+        }
+
     }
 }

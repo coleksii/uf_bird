@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.coleksii.uf_bird.model.PipePair;
 import com.coleksii.uf_bird.services.PipesService;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class PiperServiceImpl implements PipesService {
@@ -53,6 +55,15 @@ public class PiperServiceImpl implements PipesService {
         Random random = new Random();
         float position = min + random.nextFloat() * (max - min);;
         return position;
+    }
+
+    @Override
+    public List<PipePair> createStorePipes() {
+        List<PipePair> list = new LinkedList<PipePair>();
+        while (list.size() < 10) {
+            list.add(generatePiperPair());
+        }
+        return list;
     }
 
 }
