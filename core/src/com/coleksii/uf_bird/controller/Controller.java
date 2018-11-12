@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.coleksii.uf_bird.model.Bird;
 
 public class Controller {
+
     public void birdController(Bird bird){
         if (Gdx.input.isKeyPressed(Input.Keys.UP))
             bird.setY(bird.getY() + 5);

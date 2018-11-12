@@ -3,25 +3,22 @@ package com.coleksii.uf_bird.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class OnePipe extends Model{
 
     private float relativeHeight;
     private float relativeWidth;
 
-    public OnePipe(String value) {
+    OnePipe(String value) {
         super(value);
         width = Gdx.graphics.getWidth() * 4 / 25;
         height = Gdx.graphics.getHeight() * 4 / 5;
         relativeHeight = 0;
         relativeWidth = 0;
-    }
-
-    public Texture getTexture() {
-        return texture;
-    }
-
-    public void setTexture(Texture texture) {
-        this.texture = texture;
     }
 
     @Override

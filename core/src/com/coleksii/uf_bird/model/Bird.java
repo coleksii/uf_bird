@@ -4,6 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Bird extends Model{
 
     private Animation<Texture> animation;
@@ -47,9 +52,5 @@ public class Bird extends Model{
             leftSide = x;
             this.x = x;
         }
-    }
-
-    public Animation<Texture> getAnimation() {
-        return animation;
     }
 }

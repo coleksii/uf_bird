@@ -5,11 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.coleksii.uf_bird.enums.States;
+import com.coleksii.uf_bird.enums.State;
 import com.coleksii.uf_bird.information.UserInformation;
 import com.coleksii.uf_bird.services.ButtonService;
 
@@ -24,13 +25,13 @@ public class ButtonServiceImpl implements ButtonService {
     }
 
     @Override
-    public TextButton createNewGameButton(final UserInformation userInformation) {
+    public TextButton createNewGameButton() {
         TextButton newGameButton = new TextButton("Start game", skin);
         newGameButton.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8, Gdx.graphics.getHeight()/2 + (newGameButton.getHeight()));
         newGameButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                userInformation.setUserState(States.PREPARE);
+                UserInformation.setUserState(State.PREPARE);
             }
         });
         return newGameButton;
@@ -48,6 +49,20 @@ public class ButtonServiceImpl implements ButtonService {
             }
         });
         return exitGameButton;
+    }
+
+    @Override
+    public Actor createToMainMenuButton() {
+        TextButton toMainMenuButton = new TextButton("To Main Menu", skin);
+        toMainMenuButton.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8, Gdx.graphics.getHeight()/2);
+        toMainMenuButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                UserInformation.setUserState(State.MAIN_MENU);
+
+            }
+        });
+        return toMainMenuButton;
     }
 
     private Skin createBasicSkin(){

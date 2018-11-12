@@ -1,38 +1,47 @@
 package com.coleksii.uf_bird.information;
 
-import com.coleksii.uf_bird.enums.States;
+import com.coleksii.uf_bird.enums.State;
+
 
 public class UserInformation {
 
-    private States userState;
-    private int score;
-    private int latestScore;
+    private static State userState = State.MAIN_MENU;
+    private static int gamespeed = 3;
+    private static int gameScore;
+    private static int latestGameScore;
 
-    public int getScore() {
-        return score;
+
+    public static int getGameScore() {
+        return gameScore;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public static void setGameScore(int gameScore) {
+        UserInformation.gameScore = gameScore;
     }
 
-    public int getLatestScore() {
-        return latestScore;
+    public static int getLatestGameScore() {
+        return latestGameScore;
     }
 
-    public void setLatestScore(int latestScore) {
-        this.latestScore = latestScore;
+    public static void setLatestGameScore(int latestGameScore) {
+        UserInformation.latestGameScore = latestGameScore;
     }
 
-    public UserInformation(States userState) {
-        this.userState = userState;
+
+    public static int getGamespeed() {
+        return gamespeed;
     }
 
-    public States getUserState() {
+    public static void setGamespeed(int gamespeed) {
+        UserInformation.gamespeed = gamespeed;
+    }
+
+
+    public static State getUserState() {
         return userState;
     }
 
-    public void setUserState(States userState) {
-        this.userState = userState;
+    public static void setUserState(State userState) {
+        UserInformation.userState = userState;
     }
 }
