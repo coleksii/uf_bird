@@ -38,19 +38,15 @@ public class Bird extends Model{
 
     @Override
     public void setY(float y) {
-        if (y > 0 && y + height < Gdx.graphics.getHeight()) {
             upperSide = y + height;
             bottomSide = y;
             this.y = y;
-        }
     }
 
     @Override
     public void setX(float x) {
-        if (x > 0 && x + width < Gdx.graphics.getWidth()) {
             rightSide = x + width;
             leftSide = x;
             this.x = x;
-        }
     }
 }

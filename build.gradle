@@ -101,6 +101,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compileOnly 'org.projectlombok:lombok:1.16.22'
         annotationProcessor 'org.projectlombok:lombok:1.16.22'
+        compile group: 'com.googlecode.soundlibs', name: 'jlayer', version: '1.0.1-1'
         
     }
 }

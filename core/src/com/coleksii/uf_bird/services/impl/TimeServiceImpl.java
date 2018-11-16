@@ -1,5 +1,6 @@
 package com.coleksii.uf_bird.services.impl;
 
+import com.coleksii.uf_bird.information.UserInformation;
 import com.coleksii.uf_bird.services.TimeService;
 
 public class TimeServiceImpl implements TimeService{
@@ -29,7 +30,7 @@ public class TimeServiceImpl implements TimeService{
 
     @Override
     public boolean isTimeTocreatePipe() {
-        if (System.nanoTime() - createPipeCycle > CREATE_PIPES){
+        if (System.nanoTime() - createPipeCycle > UserInformation.getCreatePipes()){
             createPipeCycle = System.nanoTime();
             return true;
         }

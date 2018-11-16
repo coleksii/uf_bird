@@ -1,21 +1,22 @@
 package com.coleksii.uf_bird;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.coleksii.uf_bird.background.GraphicObjProcessor;
+import com.coleksii.uf_bird.background.GameProcessor;
+import com.coleksii.uf_bird.music.MusicPlayer;
 
 public class MyGdxGame extends ApplicationAdapter {
 
-    private GraphicObjProcessor graphicObjProcessor;
-
+    private GameProcessor gameProcessor;
 
     @Override
     public void create() {
-        graphicObjProcessor = new GraphicObjProcessor();
+        gameProcessor = new GameProcessor();
+        MusicPlayer.music();
     }
 
     @Override
     public void render() {
-        graphicObjProcessor.processing();
+        gameProcessor.processing();
     }
 
     @Override

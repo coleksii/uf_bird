@@ -1,5 +1,8 @@
 package com.coleksii.uf_bird.model;
 
+import com.badlogic.gdx.graphics.Texture;
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +11,7 @@ import lombok.Setter;
 public class Ground extends Model {
 
     private boolean isColisianble;
-    private int speed;
+    private float speed;
 
     public Ground(String value) {
         super(value);

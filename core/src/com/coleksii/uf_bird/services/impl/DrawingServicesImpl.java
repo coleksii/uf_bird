@@ -13,6 +13,7 @@ import com.coleksii.uf_bird.model.Bird;
 import com.coleksii.uf_bird.model.Ground;
 import com.coleksii.uf_bird.model.OnePipe;
 import com.coleksii.uf_bird.model.PipePair;
+import com.coleksii.uf_bird.services.AnimationService;
 import com.coleksii.uf_bird.services.ButtonService;
 import com.coleksii.uf_bird.services.DrawingServices;
 
@@ -23,16 +24,17 @@ public class DrawingServicesImpl implements DrawingServices {
     private SpriteBatch batch;
     private Stage stage;
     private Stage stageGameOver;
-    private float elapsedTime;
     private BitmapFont font;
     private BitmapFont prepareFont;
     private ButtonService buttonService;
     private Texture gameover;
+    private AnimationService animationService;
 
 
     public DrawingServicesImpl(Stage stage, Stage stageGameOver) {
         gameover = new Texture(TextureName.GAMEOVER.getValue());
         batch = new SpriteBatch();
+        animationService = new AnimationServiceImpl();
         this.stage = stage;
         this.stageGameOver = stageGameOver;
 
@@ -51,14 +53,14 @@ public class DrawingServicesImpl implements DrawingServices {
     }
 
     @Override
-    public void drawing(Bird bird, List<PipePair> pipesCollection, List<Ground> groundList) {
+    public void drawing(Bird bird, List<PipePair> pipesCollection, List<Ground> groundList, List<Ground> backGroundList) {
         OnePipe upperPipe;
         OnePipe downPipe;
-        elapsedTime += Gdx.graphics.getDeltaTime();
 
         batch.begin();
+        updateBackGround(backGroundList);
         updateBackGround(groundList);
-        batch.draw(bird.getAnimation().getKeyFrame(elapsedTime, true), bird.getX(), bird.getY(), bird.getWidth(), bird.getHeight());
+        batch.draw(animationService.animatedBird(bird), bird.getX(), bird.getY(), bird.getWidth(), bird.getHeight());
         for (PipePair pipes : pipesCollection) {
             upperPipe = pipes.getUpperPipe();
             downPipe = pipes.getDownerPipe();
@@ -69,9 +71,10 @@ public class DrawingServicesImpl implements DrawingServices {
             prepareFont.draw(batch, "TOUCH TO PLAY", Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
         }
         font.draw(batch, "score: " + UserInformation.getGameScore(), 10, Gdx.graphics.getHeight() - font.getCapHeight());
+        font.draw(batch, "Level: " + UserInformation.getLevel(), 10, Gdx.graphics.getHeight() / 10);
         if (UserInformation.getUserState() == State.GAME_OVER){
             batch.draw(gameover, Gdx.graphics.getWidth() / 2 - Gdx.graphics.getWidth() / 4 / 2, Gdx.graphics.getHeight() / 4 * 3, Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight()/ 10);
-            prepareFont.draw(batch, "YOUR LATEST SCORE IS: " + UserInformation.getGameScore(), Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 5 * 2);
+            prepareFont.draw(batch, "YOUR SCORE IS: " + UserInformation.getGameScore(), Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight() / 5 * 2);
         }
         batch.end();
         if (UserInformation.getUserState() == State.MAIN_MENU) {

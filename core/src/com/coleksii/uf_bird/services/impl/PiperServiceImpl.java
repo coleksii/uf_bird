@@ -14,13 +14,11 @@ public class PiperServiceImpl implements PipesService {
 
     private int size;
     float spaceBetweenPipe;
-    private int speedPipes;
     private TimeService timeService;
 
     public PiperServiceImpl() {
         size =  Gdx.graphics.getHeight() / 10;
-        spaceBetweenPipe = size * 4;
-        this.speedPipes = UserInformation.getGamespeed();
+        spaceBetweenPipe = size * 8;
         this.timeService = new TimeServiceImpl();
     }
 
@@ -58,12 +56,12 @@ public class PiperServiceImpl implements PipesService {
 
 
     private float generateUpPoistion(PipePair pipePair){
-        float min = pipePair.getDownerPipe().getUpperSide() + spaceBetweenPipe;
-        float max = Gdx.graphics.getHeight() - size;
-        Random random = new Random();
-        float randomFloat = random.nextFloat();
-        float position = min + randomFloat * (max - min);
-        return position;
+//        float min = pipePair.getDownerPipe().getUpperSide() + spaceBetweenPipe;
+//        float max = Gdx.graphics.getHeight() - size;
+//        Random random = new Random();
+//        float randomFloat = random.nextFloat();
+//        float position = min + randomFloat * (max - min);
+        return pipePair.getDownerPipe().getUpperSide() + spaceBetweenPipe;
     }
 
 
@@ -86,8 +84,8 @@ public class PiperServiceImpl implements PipesService {
             }
         }
         for (PipePair pipes : pipesCollection) {
-            pipes.getDownerPipe().setX(pipes.getDownerPipe().getX() - speedPipes);
-            pipes.getUpperPipe().setX(pipes.getUpperPipe().getX() - speedPipes);
+            pipes.getDownerPipe().setX(pipes.getDownerPipe().getX() - UserInformation.getGamespeed());
+            pipes.getUpperPipe().setX(pipes.getUpperPipe().getX() - UserInformation.getGamespeed());
             if (pipes.getDownerPipe().getRightSide() < 0) {
                 storePipes.add(pipes);
             }
