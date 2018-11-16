@@ -69,19 +69,7 @@ public class GameProcessor {
         drawingServices.drawing(bird, pipesCollection, groundList, backGroundList);
     }
 
-    private void upperGameLevel() {
-        UserInformation.setLevel(UserInformation.getLevel() + 1);
-
-        for (Ground ground: groundList){
-            ground.setSpeed(ground.getSpeed() * 1.2f);
-        }
-        UserInformation.setGamespeed(UserInformation.getGamespeed() * 1.2f);
-        UserInformation.setCreatePipes((long) (UserInformation.getCreatePipes() / 1.2));
-        UserInformation.setBirdSpeed(UserInformation.getBirdSpeed() * 1.05f);
-    }
-
     private void processGameState() {
-//        if (collision()) {
         if (collisionAndScoreService.collisionAndScoreProcess(bird, pipesCollection, groundList)) {
             UserInformation.setUserState(State.GAME_OVER);
         } else {
@@ -109,41 +97,4 @@ public class GameProcessor {
         }
     }
 
-
-    private boolean collisionWithGround(){
-        for (Ground ground : groundList){
-            if (ground.isColisianble())
-                if (bird.getBottomSide() < ground.getUpperSide())
-                    return true;
-        }
-        return false;
-    }
-
-    private boolean collision() {
-        return collisionWithObjectAndProcessScore() || collisionWithGround() || collisionWithMap();
-    }
-
-    private boolean collisionWithMap() {
-        return bird.getLeftSide() < 0 || bird.getRightSide() > Gdx.graphics.getWidth() || bird.getUpperSide() > Gdx.graphics.getHeight() || bird.getBottomSide() < 0;
-    }
-
-
-    private boolean collisionWithObjectAndProcessScore() {
-        for (PipePair pipePair : pipesCollection) {
-            if (collisionWithPipe(pipePair.getDownerPipe()) || collisionWithPipe(pipePair.getUpperPipe()))
-                return true;
-            if (!pipePair.isPassed() && bird.getLeftSide() > pipePair.getDownerPipe().getRightSide()){
-                UserInformation.setGameScore(UserInformation.getGameScore() + 1);
-                if (UserInformation.getGameScore() % 10 == 0){
-                    upperGameLevel();
-                }
-                pipePair.setPassed(true);
-            }
-        }
-        return false;
-    }
-
-    private boolean collisionWithPipe(OnePipe pipe) {
-        return bird.getRightSide() > pipe.getLeftSide() && bird.getLeftSide() < pipe.getRightSide() && bird.getUpperSide() > pipe.getBottomSide() && bird.getBottomSide() < pipe.getUpperSide();
-    }
 }
